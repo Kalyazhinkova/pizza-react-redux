@@ -22,7 +22,7 @@ function App() {
           <div className="content__items">
             {
               pizzas.map((pizza) =>
-              (<PizzaBlock {...pizza}
+              (<PizzaBlock key={pizza.id} {...pizza}
               //js spred - но только если свойства объекта совпадают с наименованием
               // title={pizza.title} price={pizza.price} imageUrl={pizza.imageUrl} sizes={pizza.sizes} types={pizza.types}
               />))
