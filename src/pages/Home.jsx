@@ -7,22 +7,37 @@ import PizzaSceleton from '../components/PizzaBlock/PizzaSceleton';
 export default function Home() {
   const [pizzas, setPizzas] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [categoryId, setCategoryId] = useState(0); //выбор вида пиццы
+  const [sortType, setSortType] = useState({
+    name: 'популярности (desc)',
+    sortProperty: 'rating',
+    sortType: 'desc',
+  }); //выбор сортировки
+
+  console.log(categoryId, sortType);
 
   useEffect(() => {
-    fetch('https://644043bf3dee5b763e33483b.mockapi.io/items')
+    setIsLoading(true);
+    fetch(
+      `https://644043bf3dee5b763e33483b.mockapi.io/items?${
+        categoryId ? `category=${categoryId}` : ``
+      }&sortBy=${sortType.sortProperty}&order=${sortType.sortType}`,
+    )
       .then((res) => res.json())
       .then((arr) => {
         setPizzas(arr);
         setIsLoading(false);
       });
-  }, []);
+    window.scrollTo(0, 0); //перекинуть вверх страницы
+  }, [categoryId, sortType]);
+
   return (
     <>
       <div className="container">
         <div className="content__top">
-          <Categories />
+          <Categories value={categoryId} onChangeCategory={(i) => setCategoryId(i)} />
           {/* равносильное можно вызвать таким обртазом, так как это функция {Categories()} */}
-          <Sort />
+          <Sort value={sortType} onChangeSort={(i) => setSortType(i)} />
         </div>
         <h2 className="content__title">Все пиццы</h2>
         <div className="content__items">
